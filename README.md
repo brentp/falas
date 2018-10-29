@@ -29,6 +29,10 @@ more useful:
 This is a [nim](https://github.com/nim-lang/nim) library and will be used in other projects like [indelope](https://github.com/brentp/indelope)
 and other forthcoming projects. However, the concepts here-in might be useful independent of the software.
 
+## TODO
+
++ [ ] for unmapped/mismapped reads, try both orientations.
+
 
 ### Acknowledgements
 

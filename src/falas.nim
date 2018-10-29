@@ -77,7 +77,8 @@ proc trim*(c:var Contig, min_support:int=2) =
   var a = 0
   while a < c.len - 1 and c.support[a] < uint32(min_support):
     a += 1
-  c.start += a
+  if c.start != -1:
+    c.start += a
 
   if a >= c.len - 1:
     c.sequence.set_len(0)
@@ -188,8 +189,8 @@ proc insert*(t:var Contig, q:var Contig, m:var Match) =
   ## were calculated during the matching.
   if not m.aligned: return
   var dont_overwrite = initSet[int](2)
-  if m.corrections.len > 0:
-    stderr.write_line $m.corrections.len
+  #if m.corrections.len > 0:
+  #  stderr.write_line $m.corrections.len
   for correction in m.corrections:
     # flip the bases and change the support
     # we are setting the support below, so make sure not to overwrite these
@@ -233,7 +234,10 @@ proc insert*(t:var Contig, q:var Contig, m:var Match) =
     t.sequence = tseq
     t.support = tsup
     t.nreads += q.nreads
-    t.start = q.start
+    if q.start != -1 and t.start != -1:
+      t.start = q.start
+    elif t.start != -1:
+        t.start += m.offset
     t.reads.add(q.reads)
     t.names.add(q.names)
     return
@@ -256,6 +260,9 @@ proc insert*(t:var Contig, q:var Contig, m:var Match) =
   t.nreads += q.nreads
   t.reads.add(q.reads)
   t.names.add(q.names)
+  if t.start == -1 and q.start != -1:
+    t.start = q.start - m.offset
+    #stderr.write_line "t.start:", t.start
 
 proc best_match(contigs: var seq[Contig], q:Contig, min_overlap:float64=65, max_mismatch:int=0): Match =
   var matches = new_seq_of_cap[Match](2)
@@ -525,7 +532,7 @@ when isMainModule:
 
     test "defrag":
       var tt = make_contig("CCGGGCTGGGCTT", 1, 2)
-      var qq = make_contig(   "GGCTGGGCT", 1, 2)
+      var qq = make_contig(   "GGCTGGGCT", 4, 2)
       tt.names[0] = "AAAA"
       qq.names[0] = "BBBB"
 
