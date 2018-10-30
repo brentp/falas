@@ -1249,14 +1249,14 @@ function main() {
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#Contig"
     title="Contig = ref object
-  sequence*: string            ## number of reads covering each base in the contig.
-  support*: seq[uint32]
-  nreads*: int
+  sequence*: string            ## the assembled sequence
+  support*: seq[uint32]        ## number of reads covering each base in the contig.
+  nreads*: int                 ## number of reads that contributed to this contig.
   start*: int
-  reads*: seq[string] ## names are used to track fragments. it is recommended to send only
+  reads*: seq[string]
+  names*: seq[string] ## names are used to track fragments. it is recommended to send only
                     ## primary alignments (not supplementary). The user is responsible for sending
-                    ## names that assure fragment-specificity (this should be a pretty minimal burden).
-  names*: seq[string]"><wbr />Contig<span class="attachedType" style="visibility:hidden"></span></a></li>
+                    ## names that assure fragment-specificity (this should be a pretty minimal burden)."><wbr />Contig<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#resolvable_mismatch_fn"
     title="resolvable_mismatch_fn = proc (qsup: uint32; tsup: uint32; qreads: int; treads: int): bool"><wbr />resolvable_<wbr />mismatch_<wbr />fn<span class="attachedType" style="visibility:hidden"></span></a></li>
 
@@ -1329,15 +1329,15 @@ function main() {
 <dl class="item">
 <a id="Contig"></a>
 <dt><pre><a href="falas.html#Contig"><span class="Identifier">Contig</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
-  <span class="Identifier">sequence</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>            <span class="Comment">## number of reads covering each base in the contig.</span>
-  <span class="Identifier">support</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">uint32</span><span class="Other">]</span>
-  <span class="Identifier">nreads</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">sequence</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>            <span class="Comment">## the assembled sequence</span>
+  <span class="Identifier">support</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">uint32</span><span class="Other">]</span>        <span class="Comment">## number of reads covering each base in the contig.</span>
+  <span class="Identifier">nreads</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## number of reads that contributed to this contig.</span>
   <span class="Identifier">start</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">reads</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> <span class="Comment">## names are used to track fragments. it is recommended to send only</span>
+  <span class="Identifier">reads</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
+  <span class="Identifier">names</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> <span class="Comment">## names are used to track fragments. it is recommended to send only</span>
                     <span class="Comment">## primary alignments (not supplementary). The user is responsible for sending</span>
                     <span class="Comment">## names that assure fragment-specificity (this should be a pretty minimal burden).</span>
-  <span class="Identifier">names</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
-</pre></dt>
+  </pre></dt>
 <dd>
 a contig is a collection of sequences that have been merged. the base_count indicates the number of reads supporting the contig at each base.
 
@@ -1378,19 +1378,19 @@ a contig is a collection of sequences that have been merged. the base_count indi
 <a id="$,Contig"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-generic 'sink' operator for Nim. For files an alias for <tt class="docutils literal"><span class="pre">write</span></tt>. If not specialized further an alias for <tt class="docutils literal"><span class="pre">add</span></tt>.
+string representation of a contig.
 
 </dd>
 <a id="fastq,Contig,string"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">fastq</span><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-generic 'sink' operator for Nim. For files an alias for <tt class="docutils literal"><span class="pre">write</span></tt>. If not specialized further an alias for <tt class="docutils literal"><span class="pre">add</span></tt>.
+a fastq-representation of a contig with the base-qualities indicating the amount of support for each base (+33)
 
 </dd>
 <a id="aligned,Match"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">aligned</span><span class="Other">(</span><span class="Identifier">ma</span><span class="Other">:</span> <span class="Identifier">Match</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-unequals operator. This is a shorthand for <tt class="docutils literal"><span class="pre">not (x == y)</span></tt>.
+indicates whether a match is aligned.
 
 </dd>
 <a id="len,Contig"></a>
@@ -1423,38 +1423,36 @@ trim bases in a contig that do not have at least <cite>min_support</cite>
 
 </dd>
 <a id="insert,Contig,Contig,Match"></a>
-<dt><pre><span class="Keyword">proc</span> <span class="Identifier">insert</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">q</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">Match</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <span class="Identifier">insert</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">q</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">Match</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 insert a contig and perform error correction for sites that were calculated during the matching.
 
 </dd>
 <a id="insert,seq[Contig],Contig,float64,int"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">insert</span><span class="Other">(</span><span class="Identifier">contigs</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">q</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">;</span> <span class="Identifier">min_overlap</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">=</span> <span class="FloatNumber">0.8</span><span class="Other">;</span>
-           <span class="Identifier">max_mismatch</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+           <span class="Identifier">max_mismatch</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
 <a id="insert,seq[Contig],string,int,string,float64,int"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">insert</span><span class="Other">(</span><span class="Identifier">contigs</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">q</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">start</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span>
-           <span class="Identifier">min_overlap</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">=</span> <span class="FloatNumber">0.8</span><span class="Other">;</span> <span class="Identifier">max_mismatch</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+           <span class="Identifier">min_overlap</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">=</span> <span class="FloatNumber">0.8</span><span class="Other">;</span> <span class="Identifier">max_mismatch</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
 <a id="defrag,seq[Contig],int"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">defrag</span><span class="Other">(</span><span class="Identifier">contigs</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">min_overlap_bases</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">10</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
-    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 merge contigs using frament information provided in the <cite>names</cite> attribute. Still requires min_overlap_bases of overlap which can be a much smaller number than we require for regular insertion since we know they are from the same fragment.
 
 </dd>
 <a id="combine,seq[Contig],int,int,float64,bool"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">combine</span><span class="Other">(</span><span class="Identifier">contigs</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">max_mismatch</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">min_support</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">3</span><span class="Other">;</span>
-            <span class="Identifier">min_overlap</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">=</span> <span class="FloatNumber">0.8</span><span class="Other">;</span> <span class="Identifier">again</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
-    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+            <span class="Identifier">min_overlap</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">=</span> <span class="FloatNumber">0.8</span><span class="Other">;</span> <span class="Identifier">again</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="falas.html#Contig"><span class="Identifier">Contig</span></a><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 merge contigs. note that this modifies the contigs in-place. again is only internal and should not be changed by the user.
 
@@ -1469,7 +1467,7 @@ merge contigs. note that this modifies the contigs in-place. again is only inter
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-10-29 18:11:36 UTC</small>
+        <small>Made with Nim. Generated: 2018-10-30 19:26:39 UTC</small>
       </div>
     </div>
   </div>

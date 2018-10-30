@@ -12,16 +12,22 @@ type
     ## a contig is a collection of sequences that have been
     ## merged. the base_count indicates the number of reads supporting
     ## the contig at each base.
+
     sequence*: string
-    ## number of reads covering each base in the contig.
+    ## the assembled sequence
+
     support*: seq[uint32]
+    ## number of reads covering each base in the contig.
+
     nreads*: int
+    ## number of reads that contributed to this contig.
     start*: int
     reads*: seq[string]
+
+    names*: seq[string]
     ## names are used to track fragments. it is recommended to send only
     ## primary alignments (not supplementary). The user is responsible for sending
     ## names that assure fragment-specificity (this should be a pretty minimal burden).
-    names*: seq[string]
 
   # internally used to track putative "resolvable mismatches"
   correction_site = tuple[qoff:int, toff:int, qbest:bool]
@@ -36,12 +42,15 @@ type
 
 
 proc `$`*(c:Contig): string =
+  ## string representation of a contig.
   result = c.sequence
   result &= '\n'
   for i, s in c.support:
     result &= (s + 33).char
 
 proc fastq*(c:Contig, name:string): string =
+  ## a fastq-representation of a contig with the base-qualities indicating the amount of support
+  ## for each base (+33)
   result = "@" & name & '\n'
   result &= c.sequence & "\n+\n"
   for s in c.support:
@@ -50,6 +59,7 @@ proc fastq*(c:Contig, name:string): string =
 const unaligned* = low(int)
 
 proc aligned*(ma: Match): bool {.inline.} =
+  ## indicates whether a match is aligned.
   return ma.offset != unaligned
 
 proc match_sort(a, b: Match): int =
