@@ -22,7 +22,9 @@ type
     nreads*: int
     ## number of reads that contributed to this contig.
     start*: int
-    reads*: seq[string]
+
+    when defined(debug):
+      reads*: seq[string]
 
     names*: seq[string]
     ## names are used to track fragments. it is recommended to send only
@@ -187,7 +189,9 @@ proc make_contig(dna: string, start:int, support:uint32=1, name:string=""): Cont
   var bc = new_seq[uint32](dna.len)
   for i in 0..bc.high:
     bc[i] = support
-  var o = Contig(sequence: dna, support:bc, nreads: int(support), start:start, reads: @[dna], names: @[name])
+  var o = Contig(sequence: dna, support:bc, nreads: int(support), start:start, names: @[name])
+  when defined(debug):
+      o.reads = @[dna]
   return o
 
 proc slide_align(q: string, t:string, qstart:int=0, tstart:int=0, min_overlap:float64=50, max_mismatch:int=0, resolved:resolvable_mismatch_fn=resolvable_mismatch): Match =
@@ -248,7 +252,8 @@ proc insert*(t:var Contig, q:var Contig, m:var Match) =
       t.start = q.start
     elif t.start != -1:
         t.start += m.offset
-    t.reads.add(q.reads)
+    when defined(debug):
+      t.reads.add(q.reads)
     t.names.add(q.names)
     return
 
@@ -268,7 +273,8 @@ proc insert*(t:var Contig, q:var Contig, m:var Match) =
     if i >= original_len:
       t.sequence[i] = q.sequence[qoff]
   t.nreads += q.nreads
-  t.reads.add(q.reads)
+  when defined(debug):
+    t.reads.add(q.reads)
   t.names.add(q.names)
   if t.start == -1 and q.start != -1:
     t.start = q.start - m.offset
