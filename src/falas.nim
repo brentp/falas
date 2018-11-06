@@ -2,8 +2,7 @@ import algorithm
 import sequtils
 import math
 import sets
-import hts
-from ./version import falasVersion
+from ./falaspkg/version import falasVersion
 
 var Version* = falasVersion
 
