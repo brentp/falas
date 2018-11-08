@@ -1,7 +1,7 @@
 import ospaths
 template thisModuleFile: string = instantiationInfo(fullPaths = true).filename
 
-when fileExists(thisModuleFile.parentDir / "falas/falas.nim"):
+when fileExists(thisModuleFile.parentDir / "src/falas.nim"):
   # In the git repository the Nimble sources are in a ``src`` directory.
   import src/falaspkg/version as _
 else:
